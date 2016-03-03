@@ -1,0 +1,4 @@
+*.o
+gareth-standalone
+unit-tests
+gareth.conf
