@@ -61,8 +61,39 @@ int init_gareth(struct _u_instance * instance, const char * url_prefix, struct _
     // Add a new message
     ulfius_add_endpoint_by_val(instance, "POST", url_prefix, "/message", NULL, NULL, NULL, &callback_gareth_add_messages, (void*)conn);
     
+    y_log_message(Y_LOG_LEVEL_INFO, "gareth is available on prefix %s", url_prefix);
     return 1;
   } else {
+    y_log_message(Y_LOG_LEVEL_INFO, "Error initializing gareth, error input parameters");
+    return 0;
+  }
+}
+
+/**
+ * close_gareth
+ * 
+ * Close Gareth webservice
+ * 
+ */
+int close_gareth(struct _u_instance * instance, const char * url_prefix) {
+  if (instance != NULL && url_prefix != NULL) {
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/alert/");
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/alert/@type/@alert_name");
+    ulfius_remove_endpoint_by_val(instance, "POST", url_prefix, "/alert/@type/");
+    ulfius_remove_endpoint_by_val(instance, "PUT", url_prefix, "/alert/@type/@alert_name");
+    ulfius_remove_endpoint_by_val(instance, "DELETE", url_prefix, "/alert/@type/@alert_name");
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/filter/");
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/filter/@filter_name");
+    ulfius_remove_endpoint_by_val(instance, "POST", url_prefix, "/filter/");
+    ulfius_remove_endpoint_by_val(instance, "PUT", url_prefix, "/filter/@filter_name");
+    ulfius_remove_endpoint_by_val(instance, "DELETE", url_prefix, "/filter/@filter_name");
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/message/");
+    ulfius_remove_endpoint_by_val(instance, "GET", url_prefix, "/message/@filter_name");
+    ulfius_remove_endpoint_by_val(instance, "POST", url_prefix, "/message");
+    
+    return 1;
+  } else {
+    y_log_message(Y_LOG_LEVEL_INFO, "Error closing gareth, error input parameters");
     return 0;
   }
 }

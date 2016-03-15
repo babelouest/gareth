@@ -117,6 +117,7 @@
 #define COLUMN_ALERT_HTTP_HEADER_VALUE "ahh_value"
 
 int init_gareth(struct _u_instance * instance, const char * url_prefix, struct _h_connection * conn);
+int close_gareth(struct _u_instance * instance, const char * url_prefix);
 
 // SMTP alert management
 json_t * get_smtp_alert(struct _h_connection * conn, const char * name);

@@ -62,7 +62,7 @@ release-standalone: standalone
 
 release: ADDITIONALFLAGS=-O3
 
-release: gareth.o alert.o filter.o message.o gareth.o
+release: gareth.o alert.o filter.o message.o
 
 test: debug
 	./gareth
