@@ -30,7 +30,8 @@
 #include <ulfius.h>
 #include <orcania.h>
 
-#define SERVER_URL_PREFIX "http://localhost:4784/gareth"
+//#define SERVER_URL_PREFIX "http://localhost:4784/gareth"
+#define SERVER_URL_PREFIX "http://localhost:2473/gareth"
 
 /**
  * decode a u_map into a string
