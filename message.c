@@ -158,7 +158,7 @@ json_t * is_message_valid(const json_t * message) {
  * Get a message list corresponding to the filter_name specified and the additional_filters specified
  */
 json_t * get_message_list(struct _h_connection * conn, const char * filter_name, const struct _u_map * map_url, uint limit, uint offset) {
-  json_t * message_list = json_array(), * result, * message, * cur_message, * where_clause = NULL, * order_by = NULL, * j_query = json_object();
+  json_t * message_list = json_array(), * result, * message, * cur_message, * columns, * where_clause = NULL, * order_by = NULL, * j_query = json_object();
   uint cur_limit = (limit==0?MESSAGES_LIMIT_DEFAULT:(limit>MESSAGES_LIMIT_MAXIMUM?MESSAGES_LIMIT_MAXIMUM:limit));
   size_t index;
   
@@ -168,6 +168,8 @@ json_t * get_message_list(struct _h_connection * conn, const char * filter_name,
     json_decref(j_query);
     return NULL;
   }
+  
+  columns = json_pack("{sssss}", "UNIX_TIMESTAMP(m_date) AS m_date", "m_priority", "m_source", "m_text", "m_tags");
   
   if (filter_name != NULL) {
     where_clause = generate_where_clause_from_filter_name(conn, filter_name);
@@ -183,6 +185,7 @@ json_t * get_message_list(struct _h_connection * conn, const char * filter_name,
   order_by = json_string(COLUMN_MESSAGE_DATE " DESC");
   
   json_object_set_new(j_query, "table", json_string(TABLE_MESSAGE));
+  json_object_set_new(j_query, "columns", columns);
   json_object_set_new(j_query, "where", where_clause);
   json_object_set_new(j_query, "order_by", order_by);
   json_object_set_new(j_query, "limit", json_integer(cur_limit));
