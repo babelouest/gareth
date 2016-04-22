@@ -147,7 +147,7 @@ int callback_gareth_get_alert (const struct _u_request * request, struct _u_resp
     conn = (struct _h_connection *)user_data;
     type = u_map_get(request->map_url, "type");
     alert_name = u_map_get(request->map_url, "alert_name");
-    if (type != NULL && strcmp(type, "smtp") == 0) {
+    if (type != NULL && nstrcmp(type, "smtp") == 0) {
       j_result = get_smtp_alert(conn, alert_name);
       if (j_result != NULL) {
         response->json_body = j_result;
@@ -155,7 +155,7 @@ int callback_gareth_get_alert (const struct _u_request * request, struct _u_resp
       } else {
         response->status = 404;
       }
-    } else if (type != NULL && strcmp(type, "http") == 0) {
+    } else if (type != NULL && nstrcmp(type, "http") == 0) {
       j_result = get_http_alert(conn, alert_name);
       if (j_result != NULL) {
         response->json_body = j_result;
@@ -187,7 +187,7 @@ int callback_gareth_add_alert (const struct _u_request * request, struct _u_resp
   } else {
     conn = (struct _h_connection *)user_data;
     type = u_map_get(request->map_url, "type");
-    if (type != NULL && strcmp(type, "smtp") == 0) {
+    if (type != NULL && nstrcmp(type, "smtp") == 0) {
       j_name = json_object_get(request->json_body, "name");
       if (j_name != NULL && json_is_string(j_name)) {
         tmp = get_smtp_alert(conn, json_string_value(j_name));
@@ -232,7 +232,7 @@ int callback_gareth_add_alert (const struct _u_request * request, struct _u_resp
         json_object_set_new(response->json_body, "error", json_string("smtp alert invalid: name must be a string"));
         response->status = 400;
       }
-    } else if (type != NULL && strcmp(type, "http") == 0) {
+    } else if (type != NULL && nstrcmp(type, "http") == 0) {
       j_name = json_object_get(request->json_body, "name");
       if (j_name != NULL && json_is_string(j_name)) {
         tmp = get_http_alert(conn, json_string_value(j_name));
@@ -306,7 +306,7 @@ int callback_gareth_modify_alert (const struct _u_request * request, struct _u_r
   } else {
     conn = (struct _h_connection *)user_data;
     type = u_map_get(request->map_url, "type");
-    if (type != NULL && strcmp(type, "smtp") == 0) {
+    if (type != NULL && nstrcmp(type, "smtp") == 0) {
       name = u_map_get(request->map_url, "alert_name");
       tmp = get_smtp_alert(conn, name);
       if (tmp != NULL) {
@@ -340,7 +340,7 @@ int callback_gareth_modify_alert (const struct _u_request * request, struct _u_r
         json_decref(tmp);
         response->status = 404;
       }
-    } else if (type != NULL && strcmp(type, "http") == 0) {
+    } else if (type != NULL && nstrcmp(type, "http") == 0) {
       name = u_map_get(request->map_url, "alert_name");
       tmp = get_http_alert(conn, name);
       if (tmp != NULL) {
@@ -399,7 +399,7 @@ int callback_gareth_delete_alert (const struct _u_request * request, struct _u_r
     conn = (struct _h_connection *)user_data;
     type = u_map_get(request->map_url, "type");
     alert_name = u_map_get(request->map_url, "alert_name");
-    if (type != NULL && strcmp(type, "smtp") == 0) {
+    if (type != NULL && nstrcmp(type, "smtp") == 0) {
       j_result = get_smtp_alert(conn, alert_name);
       if (j_result != NULL) {
         if (remove_smtp_alert(conn, alert_name)) {
@@ -412,7 +412,7 @@ int callback_gareth_delete_alert (const struct _u_request * request, struct _u_r
       } else {
         response->status = 404;
       }
-    } else if (type != NULL && strcmp(type, "http") == 0) {
+    } else if (type != NULL && nstrcmp(type, "http") == 0) {
       j_result = get_http_alert(conn, alert_name);
       if (j_result != NULL) {
         if (remove_http_alert(conn, alert_name)) {

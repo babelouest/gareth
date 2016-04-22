@@ -50,15 +50,15 @@ int add_message(struct _h_connection * conn, const json_t * message) {
     json_decref(db_message);
     return 0;
   } else {
-    if (0 == strcmp(json_string_value(json_object_get(message_copy, "priority")), "NONE")) {
+    if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "NONE")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_NONE));
-    } else if (0 == strcmp(json_string_value(json_object_get(message_copy, "priority")), "LOW")) {
+    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "LOW")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_LOW));
-    } else if (0 == strcmp(json_string_value(json_object_get(message_copy, "priority")), "MEDIUM")) {
+    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "MEDIUM")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_MEDIUM));
-    } else if (0 == strcmp(json_string_value(json_object_get(message_copy, "priority")), "HIGH")) {
+    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "HIGH")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_HIGH));
-    } else if (0 == strcmp(json_string_value(json_object_get(message_copy, "priority")), "CRITICAL")) {
+    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "CRITICAL")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_CRITICAL));
     }
     json_object_set_new(db_message, COLUMN_MESSAGE_SOURCE, json_copy(json_object_get(message_copy, "source")));
@@ -122,7 +122,7 @@ json_t * is_message_valid(const json_t * message) {
     priority = json_object_get(message_copy, "priority");
     if (priority != NULL || json_is_string(priority)) {
       value = json_string_value(priority);
-      if (0 != strcmp(value, "NONE") && 0 != strcmp(value, "LOW") && 0 != strcmp(value, "MEDIUM") && 0 != strcmp(value, "HIGH") && 0 != strcmp(value, "CRITICAL")) {
+      if (0 != nstrcmp(value, "NONE") && 0 != nstrcmp(value, "LOW") && 0 != nstrcmp(value, "MEDIUM") && 0 != nstrcmp(value, "HIGH") && 0 != nstrcmp(value, "CRITICAL")) {
         json_array_append_new(j_return, json_string("Priority is mandatory and must have the following string value: NONE, LOW, MEDIUM, HIGH, CRITICAL"));
       }
     } else {
@@ -246,7 +246,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
   if (keys != NULL && where_clause != NULL) {
     for (i=0; keys[i] != NULL; i++) {
       clause = 0;
-      if (0 == strcasecmp("date", keys[i])) {
+      if (0 == nstrcasecmp("date", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -263,17 +263,17 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         } else {
           value = NULL;
         }
-      } else if (0 == strcasecmp("priority", keys[i])) {
-        if (0 == strcasecmp("low", u_map_get(map_url, keys[i]))) {
+      } else if (0 == nstrcasecmp("priority", keys[i])) {
+        if (0 == nstrcasecmp("low", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_LOW);
-        } else if (0 == strcasecmp("medium", u_map_get(map_url, keys[i]))) {
+        } else if (0 == nstrcasecmp("medium", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_MEDIUM);
-        } else if (0 == strcasecmp("high", u_map_get(map_url, keys[i]))) {
+        } else if (0 == nstrcasecmp("high", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_HIGH);
-        } else if (0 == strcasecmp("critical", u_map_get(map_url, keys[i]))) {
+        } else if (0 == nstrcasecmp("critical", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_CRITICAL);
         }
@@ -287,7 +287,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
           str_element = COLUMN_MESSAGE_PRIORITY;
           ope = "=";
         }
-      } else if (0 == strcasecmp("source", keys[i])) {
+      } else if (0 == nstrcasecmp("source", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -298,7 +298,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         str_element = COLUMN_MESSAGE_SOURCE;
         ope = "=";
         value = nstrdup(u_map_get(map_url, keys[i]));
-      } else if (0 == strcasecmp("text", keys[i])) {
+      } else if (0 == nstrcasecmp("text", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -309,7 +309,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         str_element = COLUMN_MESSAGE_TEXT;
         ope = "LIKE";
         value = msprintf("%%%s%%", u_map_get(map_url, keys[i]));
-      } else if (0 == strcasecmp("tags", keys[i])) {
+      } else if (0 == nstrcasecmp("tags", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
