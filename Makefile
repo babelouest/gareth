@@ -31,7 +31,7 @@ LIBS=-L$(PREFIX)/lib -lc -lpthread -lconfig -ljansson -lulfius -lhoel -lyder -lo
 
 all: release
 
-standalone: gareth.o alert.o filter.o message.o gareth.o gareth-standalone.o
+gareth-standalone: gareth.o alert.o filter.o message.o gareth.o gareth-standalone.o
 	$(CC) -o gareth-standalone gareth-standalone.o gareth.o alert.o filter.o message.o $(LIBS)
 
 gareth-standalone.o: gareth-standalone.c gareth.h
@@ -54,11 +54,11 @@ clean:
 
 debug: ADDITIONALFLAGS=-DDEBUG -g -O0
 
-debug: standalone unit-tests
+debug: gareth-standalone unit-tests
 
 release-standalone: ADDITIONALFLAGS=-O3
 
-release-standalone: standalone
+release-standalone: gareth-standalone
 
 release: ADDITIONALFLAGS=-O3
 
