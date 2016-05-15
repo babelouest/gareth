@@ -187,15 +187,15 @@ json_t * smtp_alert_check = json_loads("{\
 }", JSON_DECODE_ANY, NULL);
   
   struct _u_request req_list[] = {
-    {"GET", SERVER_URL_PREFIX "/alert/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/smtp/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/smtp/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_invalid, NULL, 0, NULL, 0}, // 400
-    {"GET", SERVER_URL_PREFIX "/alert/smtp/smtp1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/alert/smtp/smtp2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"PUT", SERVER_URL_PREFIX "/alert/smtp/smtp1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_put_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"PUT", SERVER_URL_PREFIX "/alert/smtp/smtp1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_put_alert_invalid, NULL, 0, NULL, 0}, // 400
-    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
+    {"GET", SERVER_URL_PREFIX "/alert/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/smtp/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/smtp/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_invalid, NULL, 0, NULL, 0}, // 400
+    {"GET", SERVER_URL_PREFIX "/alert/smtp/smtp1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/alert/smtp/smtp2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"PUT", SERVER_URL_PREFIX "/alert/smtp/smtp1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_put_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"PUT", SERVER_URL_PREFIX "/alert/smtp/smtp1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_put_alert_invalid, NULL, 0, NULL, 0}, // 400
+    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
@@ -252,15 +252,15 @@ void run_http_alert_tests() {
 }", JSON_DECODE_ANY, NULL);
   
   struct _u_request req_list[] = {
-    {"GET", SERVER_URL_PREFIX "/alert/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/http/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/http/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_invalid, NULL, 0, NULL, 0}, // 400
-    {"GET", SERVER_URL_PREFIX "/alert/http/http1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/alert/http/http2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"PUT", SERVER_URL_PREFIX "/alert/http/http1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_put_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"PUT", SERVER_URL_PREFIX "/alert/http/http1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_put_alert_invalid, NULL, 0, NULL, 0}, // 400
-    {"DELETE", SERVER_URL_PREFIX "/alert/http/http2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"DELETE", SERVER_URL_PREFIX "/alert/http/http1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
+    {"GET", SERVER_URL_PREFIX "/alert/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/http/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/http/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_invalid, NULL, 0, NULL, 0}, // 400
+    {"GET", SERVER_URL_PREFIX "/alert/http/http1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/alert/http/http2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"PUT", SERVER_URL_PREFIX "/alert/http/http1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_put_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"PUT", SERVER_URL_PREFIX "/alert/http/http1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_put_alert_invalid, NULL, 0, NULL, 0}, // 400
+    {"DELETE", SERVER_URL_PREFIX "/alert/http/http2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"DELETE", SERVER_URL_PREFIX "/alert/http/http1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
@@ -349,19 +349,19 @@ void run_filter_tests() {
 }", JSON_DECODE_ANY, NULL);
   
   struct _u_request req_list[] = {
-    {"GET", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/http/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/smtp/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_invalid, NULL, 0, NULL, 0}, // 400
-    {"GET", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/filter/filter2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"PUT", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_put_valid, NULL, 0, NULL, 0}, // 200
-    {"PUT", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_put_invalid, NULL, 0, NULL, 0}, // 400
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/alert/http/httptest1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtptest1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
+    {"GET", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/http/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/smtp/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_invalid, NULL, 0, NULL, 0}, // 400
+    {"GET", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/filter/filter2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"PUT", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_put_valid, NULL, 0, NULL, 0}, // 200
+    {"PUT", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_put_invalid, NULL, 0, NULL, 0}, // 400
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 404
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/alert/http/httptest1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtptest1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0} // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
@@ -449,17 +449,17 @@ void run_add_message_tests() {
 }", JSON_DECODE_ANY, NULL);
   
   struct _u_request req_list[] = {
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid1, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid2, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid3, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid4, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid5, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid1, NULL, 0, NULL, 0}, // 400
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid2, NULL, 0, NULL, 0}, // 400
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid3, NULL, 0, NULL, 0}, // 400
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid4, NULL, 0, NULL, 0}, // 400
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid5, NULL, 0, NULL, 0}, // 400
-    {"GET", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid1, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid2, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid3, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid4, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_valid5, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid1, NULL, 0, NULL, 0}, // 400
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid2, NULL, 0, NULL, 0}, // 400
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid3, NULL, 0, NULL, 0}, // 400
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid4, NULL, 0, NULL, 0}, // 400
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_invalid5, NULL, 0, NULL, 0}, // 400
+    {"GET", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
@@ -517,19 +517,19 @@ void run_get_message_tests() {
 }", JSON_DECODE_ANY, NULL);
 
   struct _u_request req_list[] = {
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid1, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid2, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid3, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid4, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/message/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/message/filter2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/message/filter3", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"GET", SERVER_URL_PREFIX "/message/filter4", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter2", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter3", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter4", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid1, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid2, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid3, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid4, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/message/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/message/filter2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/message/filter3", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"GET", SERVER_URL_PREFIX "/message/filter4", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter2", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter3", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter4", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
@@ -600,14 +600,14 @@ void run_message_trigger_alert_tests() {
 }", JSON_DECODE_ANY, NULL);
 
   struct _u_request req_list[] = {
-    {"POST", SERVER_URL_PREFIX "/alert/smtp/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/alert/http/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/filter/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_high, NULL, 0, NULL, 0}, // 200
-    {"POST", SERVER_URL_PREFIX "/message/", NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_low, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
-    {"DELETE", SERVER_URL_PREFIX "/alert/http/http1", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/smtp/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, smtp_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/alert/http/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, http_post_alert_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/filter/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, filter_post_valid, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_high, NULL, 0, NULL, 0}, // 200
+    {"POST", SERVER_URL_PREFIX "/message/", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, message_post_low, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/filter/filter1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/alert/smtp/smtp1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
+    {"DELETE", SERVER_URL_PREFIX "/alert/http/http1", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0}, // 200
   };
 
   test_request_status(&req_list[0], 200, NULL);
