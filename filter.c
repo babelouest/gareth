@@ -130,7 +130,7 @@ json_t * parse_filter_from_db(const json_t * j_result) {
 }
 
 json_t * is_filter_valid(struct _h_connection * conn, const json_t * input_filter, int update) {
-  json_t * j_name, * j_description, * j_message = json_array(), * j_filter_clause, * j_filter_alert;
+  json_t * j_name, * j_description, * j_message = json_array(), * j_filter_clause;
   size_t index;
 
   if (input_filter != NULL && j_message != NULL) {
@@ -154,11 +154,8 @@ json_t * is_filter_valid(struct _h_connection * conn, const json_t * input_filte
       }
     }
     
-    json_array_foreach(json_object_get(input_filter, "filter_alert"), index, j_filter_alert) {
-      if (!is_filter_alert_valid(conn, j_filter_alert)) {
-        json_array_append_new(j_message, json_pack("{ss}", "filter_alert", "filter_alert invalid"));
-        break;
-      }
+    if (json_object_get(input_filter, "filter_alerts") != NULL && !is_filter_alert_valid(conn, json_object_get(input_filter, "filter_alerts"))) {
+      json_array_append_new(j_message, json_pack("{ss}", "filter_alerts", "filter_alert invalid"));
     }
   } else {
     y_log_message(Y_LOG_LEVEL_ERROR, "is_filter_valid - Error allocating resources or input parameters");

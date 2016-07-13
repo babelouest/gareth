@@ -625,8 +625,8 @@ json_t * is_http_alert_valid(const json_t * input_http, int update) {
     }
     
     j_body = json_object_get(input_http, "body");
-    if (j_body != NULL && !json_is_null(j_body) && (!json_is_string(j_body) || json_string_length(j_body) > 512 || json_string_length(j_body) <= 0)) {
-        json_array_append_new(j_message, json_pack("{ss}", "body", "body attribute must be a string value between 1 and 128 characters"));
+    if (j_body != NULL && !json_is_null(j_body) && (!json_is_string(j_body) || json_string_length(j_body) > 512)) {
+        json_array_append_new(j_message, json_pack("{ss}", "body", "body attribute must be a string value up to 128 characters"));
     }
     
     json_array_foreach(json_object_get(input_http, "http_headers"), index, j_http_header) {

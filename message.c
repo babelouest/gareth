@@ -382,6 +382,11 @@ json_t * generate_where_clause_from_filter_name(struct _h_connection * conn, con
           escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, "fc_value")));
           str_value = msprintf("'%\"%s\"%'", escape);
           free(escape);
+        } else if (FILTER_CLAUSE_ELEMENT_MESSAGE == json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_ELEMENT)) 
+					&& (json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_OPERATOR)) == FILTER_CLAUSE_OPERATOR_CONTAINS || json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_OPERATOR)) == FILTER_CLAUSE_OPERATOR_NOT_CONTAINS)) {
+          escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, "fc_value")));
+          str_value = msprintf("'%%%s%%'", escape);
+          free(escape);
         } else {
           escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_VALUE)));
           str_value = msprintf("'%s'", escape);
