@@ -639,7 +639,7 @@ json_t * get_filter_alert(struct _h_connection * conn, json_t * filter_id) {
 }
 
 int is_filter_alert_valid(struct _h_connection * conn, const json_t * input_filter_alert) {
-  json_t * alert_name, * alert_smtp_list, * alert_http_list;
+  json_t * alert_name, * alert_smtp_list, * alert_http_list, * j_tmp;
   size_t index;
   
   if (input_filter_alert == NULL || !json_is_object(input_filter_alert)) {
@@ -653,15 +653,21 @@ int is_filter_alert_valid(struct _h_connection * conn, const json_t * input_filt
     }
     
     json_array_foreach(alert_smtp_list, index, alert_name) {
-      if (!json_is_string(alert_name) || get_smtp_alert(conn, json_string_value(alert_name)) == NULL) {
+      j_tmp = get_smtp_alert(conn, json_string_value(alert_name));
+      if (!json_is_string(alert_name) || j_tmp == NULL) {
+        json_decref(j_tmp);
         return 0;
       }
+      json_decref(j_tmp);
     }
     
     json_array_foreach(alert_http_list, index, alert_name) {
-      if (!json_is_string(alert_name) || get_http_alert(conn, json_string_value(alert_name)) == NULL) {
+      j_tmp = get_http_alert(conn, json_string_value(alert_name));
+      if (!json_is_string(alert_name) || j_tmp == NULL) {
+        json_decref(j_tmp);
         return 0;
       }
+      json_decref(j_tmp);
     }
     return 1;
   }
@@ -706,7 +712,7 @@ json_t * parse_filter_alert_from_db(const json_t * filter_alert) {
   json_t * to_return = json_object();
   
   if (filter_alert == NULL && to_return == NULL) {
-    y_log_message(Y_LOG_LEVEL_DEBUG, "parse_filter_alert_from_db - Error empty params");
+    y_log_message(Y_LOG_LEVEL_ERROR, "parse_filter_alert_from_db - Error empty params");
     return NULL;
   } else {
     json_object_set_new(to_return, "smtp", json_copy(json_object_get(filter_alert, "smtp")));
