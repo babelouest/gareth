@@ -1,6 +1,6 @@
 # Gareth
 
-Small log application and messenging using a Json/REST interface.
+Log application and messenging using a Json/REST interface.
 
 Part of the Angharad System, this program is intended to log messages from Angharad elements, and can send an http request or an smtp message if a trigger has been set for the message.
 
