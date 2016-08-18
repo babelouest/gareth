@@ -102,7 +102,7 @@ None
 
 ##### Body
 
-```json
+```javascrit
 {
   "priority": string, values available: NONE, LOW, MEDIUM, HIGH, CRITICAL
   "source": string, maximum 64 characters
@@ -140,7 +140,7 @@ None
 
 An array of messages. A message has the following format:
 
-```json
+```javascrit
 {
   "date": string
   "priority": string, values available: NONE, LOW, MEDIUM, HIGH, CRITICAL
@@ -156,7 +156,7 @@ If a message correspond to a filter that has alerts (see below), this will trigg
 
 For example, let's say you have this following smtp alert:
 
-```json
+```javascrit
 {
   "name": "smtp1",
   "host": "localhost",
@@ -176,7 +176,7 @@ For example, let's say you have this following smtp alert:
 
 Then, Gareth has received the following message:
 
-```json
+```javascrit
 {
   "priority": "HIGH",
   "source": "Door Sensor",
@@ -207,7 +207,7 @@ An alert can be either a smtp message (email) or http request (to call an sms ap
 
 An smtp alert has the following format:
 
-```json
+```javascrit
 {
   "name": name of the smtp alert, must be unique, string, max 64 characters, mandatory
   "host": smtp hostname, string, max 128 characters, mandatory
@@ -234,7 +234,7 @@ An smtp alert has the following format:
 
 An http alert has the following format:
 
-```json
+```javascrit
 {
   "name": name of the http alert, must be unique, string, max 64 characters, mandatory
   "method": http method (GET, POST, PUT, etc.), string, max 16 characters, optional (default GET)
@@ -276,7 +276,7 @@ None
 
 An object with 2 attributes: an array of smtp alerts and an array of http alerts:
 
-```json
+```javascrit
 {
   "smtp": [
     {
@@ -331,7 +331,7 @@ None
 
 smtp alert:
 
-```json
+```javascrit
 {
   "name": name of the smtp alert, string, max 64 characters
   "host": smtp hostname, string, max 128 characters
@@ -351,7 +351,7 @@ smtp alert:
 
 http alert:
 
-```json
+```javascrit
 {
   "name": name of the http alert, string, max 64 characters
   "method": http method (GET, POST, PUT, etc.), string, max 16 characters
@@ -379,7 +379,7 @@ Add a new alert of the specified type
 ##### Body
 
 smtp alert:
-```json
+```javascrit
 {
   "name": name of the smtp alert, must be unique, string, max 64 characters, mandatory
   "host": smtp hostname, string, max 128 characters, mandatory
@@ -398,7 +398,7 @@ smtp alert:
 ```
 
 http alert:
-```json
+```javascrit
 {
   "name": name of the http alert, must be unique, string, max 64 characters, mandatory
   "method": http method (GET, POST, PUT, etc.), string, max 16 characters, optional (default GET)
@@ -431,7 +431,7 @@ Modify an existing alert of the specified type
 ##### Body
 
 smtp alert:
-```json
+```javascrit
 {
   "host": smtp hostname, string, max 128 characters, mandatory
   "port": smtp port number, integer, between 0 and 65535, optional, if set to 0 or not set, default port number will be used (25 or 587, depending on tls set to true or not)
@@ -449,7 +449,7 @@ smtp alert:
 ```
 
 http alert:
-```json
+```javascrit
 {
   "method": http method (GET, POST, PUT, etc.), string, max 16 characters, optional (default GET)
   "url": url to call, string, max 128 characters, mandatory
@@ -492,7 +492,7 @@ Filters can be used for both filter a message list or trigger an smtp or http me
 
 A filter has the following format:
 
-```json
+```javascrit
   "name": name of the filter, string, max 
   "description": "valid test",
   "filter_clauses": [
