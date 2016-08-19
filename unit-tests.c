@@ -555,27 +555,25 @@ void run_get_message_tests() {
 void run_message_trigger_alert_tests() {
   json_t * smtp_post_alert_valid = json_loads("{\
   \"name\": \"smtp1\",\
-  \"host\": \"lohot\",\
+  \"host\": \"localhost\",\
   \"port\": null,\
   \"tls\": null,\
   \"check_ca\": null,\
   \"user\": null,\
   \"password\": null,\
-  \"from\": \"gareth@babelouest.org\",\
-  \"to\": \"nicolas@babelouest.org\",\
+  \"from\": \"gareth@domain.tld\",\
+  \"to\": \"gareth@domain.tld\",\
   \"cc\": null,\
   \"bcc\": null,\
-  \"subject\": \"message de {source}\",\
-  \"body\": \"Le {date}, {source} te dit: {message}, avec les tags: {tags}\"\
+  \"subject\": \"message from {source}\",\
+  \"body\": \"On {date}, {source} says: {message}, with tags: {tags}\"\
 }", JSON_DECODE_ANY, NULL);
   json_t * http_post_alert_valid = json_loads("{\
   \"name\": \"http1\",\
   \"method\": \"POST\",\
-  \"url\": \"http://msg.koodomobile.com/msg/HTTPPostMgr\",\
-  \"body\": \"CODE=418&NUM=2552972&CALLBACK=4182552972&MESSAGE=Message+de+{source}+qui+te+dit+le+{date},+'{message}'+les+tags+sont:+'{tags}'&Send=SEND\",\
+  \"url\": \"http://localhost\",\
+  \"body\": \"MESSAGE=Message+from+{source}+on+{date},+'{message}'+tags+are:+'{tags}'&Send=SEND\",\
   \"http_headers\": [\
-    {\"key\": \"Host\", \"value\": \"msg.koodomobile.com\"},\
-    {\"key\": \"Content-Type\", \"value\": \"application/x-www-form-urlencoded\"}\
   ]\
 }", JSON_DECODE_ANY, NULL);
   json_t * filter_post_valid = json_loads("{\
