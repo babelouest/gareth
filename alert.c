@@ -165,12 +165,12 @@ json_t * is_smtp_alert_valid(const json_t * input_smtp, int update) {
     }
 
     j_user = json_object_get(input_smtp, "user");
-    if (j_user != NULL && !json_is_null(j_user) && (!json_is_string(j_user) || json_string_length(j_user) > 128 || json_string_length(j_user) <= 0)) {
+    if (j_user != NULL  && (!json_is_string(j_user) || json_string_length(j_user) > 128)) {
         json_array_append_new(j_message, json_pack("{ss}", "user", "user attribute must be a string value between 1 and 128 characters"));
     }
 
     j_password = json_object_get(input_smtp, "password");
-    if (j_password != NULL && !json_is_null(j_password) && (!json_is_string(j_password) || json_string_length(j_password) > 128 || json_string_length(j_password) <= 0)) {
+    if (j_password != NULL && (!json_is_string(j_password) || json_string_length(j_password) > 128)) {
         json_array_append_new(j_message, json_pack("{ss}", "password", "password attribute must be a string value between 1 and 128 characters"));
     }
 
@@ -185,12 +185,12 @@ json_t * is_smtp_alert_valid(const json_t * input_smtp, int update) {
     }
 
     j_cc = json_object_get(input_smtp, "cc");
-    if (j_cc != NULL && !json_is_null(j_cc) && (!json_is_string(j_cc) || json_string_length(j_cc) > 128 || json_string_length(j_cc) <= 0)) {
+    if (j_cc != NULL && (!json_is_string(j_cc) || json_string_length(j_cc) > 128)) {
         json_array_append_new(j_message, json_pack("{ss}", "cc", "cc attribute must be a string value between 1 and 128 characters"));
     }
 
     j_bcc = json_object_get(input_smtp, "bcc");
-    if (j_bcc != NULL && !json_is_null(j_bcc) && (!json_is_string(j_bcc) || json_string_length(j_bcc) > 128 || json_string_length(j_bcc) <= 0)) {
+    if (j_bcc != NULL && (!json_is_string(j_bcc) || json_string_length(j_bcc) > 128)) {
         json_array_append_new(j_message, json_pack("{ss}", "bcc", "bcc attribute must be a string value between 1 and 128 characters"));
     }
 
@@ -217,7 +217,7 @@ json_t * is_smtp_alert_valid(const json_t * input_smtp, int update) {
  * returned value must be free'd after use
  */
 json_t * parse_smtp_alert_from_http(const json_t * input_smtp) {
-  json_t * db_smtp = json_object(), * j_tls, * j_check_ca;
+  json_t * db_smtp = json_object();
   
   if (input_smtp == NULL || !json_is_object(input_smtp) || db_smtp == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "add_smtp_alert - Error allocating resources or inpur parameters");
@@ -226,7 +226,7 @@ json_t * parse_smtp_alert_from_http(const json_t * input_smtp) {
   } else {
     json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_NAME, json_copy(json_object_get(input_smtp, "name")));
     json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_HOST, json_copy(json_object_get(input_smtp, "host")));
-    if (json_is_null(json_object_get(input_smtp, "port"))) {
+    if (json_object_get(input_smtp, "port") != NULL) {
       json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_PORT, json_integer(0));
     } else {
       json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_PORT, json_copy(json_object_get(input_smtp, "port")));
@@ -235,19 +235,22 @@ json_t * parse_smtp_alert_from_http(const json_t * input_smtp) {
     json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_TO, json_copy(json_object_get(input_smtp, "to")));
     json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_SUBJECT, json_copy(json_object_get(input_smtp, "subject")));
     json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_BODY, json_copy(json_object_get(input_smtp, "body")));
-    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_USER, json_copy(json_object_get(input_smtp, "user")));
-    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_PASSWORD, json_copy(json_object_get(input_smtp, "password")));
-    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_CC, json_copy(json_object_get(input_smtp, "cc")));
-    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_BCC, json_copy(json_object_get(input_smtp, "bcc")));
+    if (json_object_get(input_smtp, "user") != NULL && json_string_length(json_object_get(input_smtp, "user")) > 0) {
+      json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_USER, json_copy(json_object_get(input_smtp, "user")));
+    }
+    if (json_object_get(input_smtp, "password") != NULL && json_string_length(json_object_get(input_smtp, "password")) > 0) {
+      json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_PASSWORD, json_copy(json_object_get(input_smtp, "password")));
+    }
+    if (json_object_get(input_smtp, "cc") != NULL && json_string_length(json_object_get(input_smtp, "cc")) > 0) {
+      json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_CC, json_copy(json_object_get(input_smtp, "cc")));
+    }
+    if (json_object_get(input_smtp, "bcc") != NULL && json_string_length(json_object_get(input_smtp, "bcc")) > 0) {
+      json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_BCC, json_copy(json_object_get(input_smtp, "bcc")));
+    }
     
-    j_tls = json_object_get(input_smtp, "tls");
-    json_object_set_new(db_smtp,COLUMN_ALERT_SMTP_TLS, json_integer_value(j_tls)==1?json_integer(1):json_integer(0));
+    json_object_set_new(db_smtp,COLUMN_ALERT_SMTP_TLS, json_object_get(input_smtp, "tls")==json_true()?json_integer(1):json_integer(0));
     
-    j_check_ca = json_object_get(input_smtp, "check_ca");
-    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_CHECK_CA, json_integer_value(j_check_ca)==1?json_integer(1):json_integer(0));
-    
-    json_decref(j_tls);
-    json_decref(j_check_ca);
+    json_object_set_new(db_smtp, COLUMN_ALERT_SMTP_CHECK_CA, json_object_get(input_smtp, "check_ca")==json_true()?json_integer(1):json_integer(0));
     
     return db_smtp;
   }
