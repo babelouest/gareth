@@ -28,9 +28,9 @@
 #ifndef __GARETH_H_
 #define __GARETH_H_
 
-#include <stdlib.h>
+#define _GARETH_VERSION 1.0
+
 #include <jansson.h>
-#include <pthread.h>
 
 /** Angharad libraries **/
 #include <ulfius.h>
@@ -40,7 +40,6 @@
 #define _HOEL_SQLITE
 #include <hoel.h>
 
-#define _GARETH_VERSION 0.9
 #define GARETH_LOG_NAME "Gareth"
 
 #define FILTER_CLAUSE_ELEMENT_VALUE_LIST "#date#priority#source#message#tag#"

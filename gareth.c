@@ -25,6 +25,8 @@
  *
  */
 
+#include <pthread.h>
+
 #include "gareth.h"
 
 /**
