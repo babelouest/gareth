@@ -25,6 +25,7 @@
  *
  */
 
+#include <string.h>
 #include "gareth.h"
 
 #define MESSAGE_PRIORITY_NONE     0

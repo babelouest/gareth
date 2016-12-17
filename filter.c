@@ -25,6 +25,7 @@
  *
  */
 
+#include <string.h>
 #include "gareth.h"
 
 json_t * get_filter(struct _h_connection * conn, const char * name) {
