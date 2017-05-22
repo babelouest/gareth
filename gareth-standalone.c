@@ -28,6 +28,7 @@
 #include <libconfig.h>
 #include <getopt.h>
 #include <signal.h>
+#include <string.h>
 
 #include "gareth.h"
 
@@ -85,7 +86,7 @@ int build_config_from_args(int argc, char ** argv, struct config_elements * conf
       switch (next_option) {
         case 'c':
           if (optarg != NULL) {
-            config->config_file = nstrdup(optarg);
+            config->config_file = o_strdup(optarg);
             if (config->config_file == NULL) {
               fprintf(stderr, "Error allocating config->config_file, exiting\n");
               exit_server(&config, GARETH_STOP);
@@ -109,7 +110,7 @@ int build_config_from_args(int argc, char ** argv, struct config_elements * conf
           break;
         case 'u':
           if (optarg != NULL) {
-            config->url_prefix = nstrdup(optarg);
+            config->url_prefix = o_strdup(optarg);
             if (config->url_prefix == NULL) {
               fprintf(stderr, "Error allocating config->url_prefix, exiting\n");
               exit_server(&config, GARETH_STOP);
@@ -121,7 +122,7 @@ int build_config_from_args(int argc, char ** argv, struct config_elements * conf
           break;
         case 'm':
           if (optarg != NULL) {
-            tmp = nstrdup(optarg);
+            tmp = o_strdup(optarg);
             if (tmp == NULL) {
               fprintf(stderr, "Error allocating log_mode, exiting\n");
               exit_server(&config, GARETH_STOP);
@@ -163,7 +164,7 @@ int build_config_from_args(int argc, char ** argv, struct config_elements * conf
           break;
         case 'f':
           if (optarg != NULL) {
-            config->log_file = nstrdup(optarg);
+            config->log_file = o_strdup(optarg);
             if (config->log_file == NULL) {
               fprintf(stderr, "Error allocating config->log_file, exiting\n");
               exit_server(&config, GARETH_STOP);
@@ -276,13 +277,15 @@ int build_config_from_file(struct config_elements * config) {
   
   if (config->instance->port == -1) {
     // Get Port number to listen to
-    config_lookup_int(&cfg, "port", &(config->instance->port));
+    int port;
+    config_lookup_int(&cfg, "port", &port);
+    config->instance->port = port;
   }
   
   if (config->url_prefix == NULL) {
     // Get prefix url
     if (config_lookup_string(&cfg, "url_prefix", &cur_prefix)) {
-      config->url_prefix = nstrdup(cur_prefix);
+      config->url_prefix = o_strdup(cur_prefix);
       if (config->url_prefix == NULL) {
         fprintf(stderr, "Error allocating config->url_prefix, exiting\n");
         config_destroy(&cfg);
@@ -305,7 +308,7 @@ int build_config_from_file(struct config_elements * config) {
           // Get log file path
           if (config->log_file == NULL) {
             if (config_lookup_string(&cfg, "log_file", &cur_log_file)) {
-              config->log_file = nstrdup(cur_log_file);
+              config->log_file = o_strdup(cur_log_file);
               if (config->log_file == NULL) {
                 fprintf(stderr, "Error allocating config->log_file, exiting\n");
                 config_destroy(&cfg);
@@ -396,12 +399,12 @@ int build_config_from_file(struct config_elements * config) {
  */
 int check_config(struct config_elements * config) {
 
-  if (config->instance->port == -1) {
+  if (config->instance->port == 1) {
     config->instance->port = GARETH_DEFAULT_PORT;
   }
   
   if (config->url_prefix == NULL) {
-    config->url_prefix = nstrdup(GARETH_DEFAULT_PREFIX);
+    config->url_prefix = o_strdup(GARETH_DEFAULT_PREFIX);
     if (config->url_prefix == NULL) {
       fprintf(stderr, "Error allocating url_prefix, exit\n");
       return 0;
@@ -426,8 +429,7 @@ int check_config(struct config_elements * config) {
 }
 
 int callback_default (const struct _u_request * request, struct _u_response * response, void * user_data) {
-  response->json_body = json_pack("{ssssss}", "error", "page not found", "message", "The page can not be found, check documentation", "url", request->http_url);
-  response->status = 404;
+  set_response_json_body_and_clean(response, 404, json_pack("{ssssss}", "error", "page not found", "message", "The page can not be found, check documentation", "url", request->http_url));
   return H_OK;
 }
 
@@ -456,7 +458,7 @@ int main(int argc, char ** argv) {
     fprintf(stderr, "Memory error - config->instance\n");
     return 1;
   }
-  ulfius_init_instance(config->instance, -1, NULL);
+  ulfius_init_instance(config->instance, 1, NULL, NULL);
 
   global_handler_variable = GARETH_RUNNING;
   // Catch end signals to make a clean exit
@@ -492,7 +494,7 @@ int main(int argc, char ** argv) {
   }
   
   // Default endpoint
-  ulfius_set_default_endpoint(config->instance, NULL, NULL, NULL, &callback_default, (void*)config->conn);
+  ulfius_set_default_endpoint(config->instance, &callback_default, (void*)config->conn);
     
   // Start the webservice
   y_log_message(Y_LOG_LEVEL_INFO, "Start gareth on port %d, prefix: %s", config->instance->port, config->url_prefix);
@@ -506,4 +508,10 @@ int main(int argc, char ** argv) {
   }
   exit_server(&config, GARETH_STOP);
   return 0;
+}
+
+int set_response_json_body_and_clean(struct _u_response * response, uint status, json_t * json_body) {
+  int res = ulfius_set_json_body_response(response, status, json_body);
+  json_decref(json_body);
+  return res;
 }

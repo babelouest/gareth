@@ -427,15 +427,15 @@ int is_filter_clause_valid(const json_t * input_filter_clause) {
     if (filter_clause_value == NULL) {
       return 0;
     } else {
-      if (0 == nstrcmp("date", element_value) || 0 == nstrcmp("priority", element_value)) {
+      if (0 == o_strcmp("date", element_value) || 0 == o_strcmp("priority", element_value)) {
         if (!json_is_integer(filter_clause_value)) {
           return 0;
-        } else if (0 == nstrcmp("date", element_value) && json_integer_value(filter_clause_value) < 0) {
+        } else if (0 == o_strcmp("date", element_value) && json_integer_value(filter_clause_value) < 0) {
           return 0;
-        } else if (0 == nstrcmp("priority", element_value) && ((json_integer_value(filter_clause_value) < 0) || json_integer_value(filter_clause_value) > NB_PRIORITY)) {
+        } else if (0 == o_strcmp("priority", element_value) && ((json_integer_value(filter_clause_value) < 0) || json_integer_value(filter_clause_value) > NB_PRIORITY)) {
           return 0;
         }
-      } else if (0 == nstrcmp("source", element_value) || 0 == nstrcmp("message", element_value) || 0 == nstrcmp("tag", element_value)) {
+      } else if (0 == o_strcmp("source", element_value) || 0 == o_strcmp("message", element_value) || 0 == o_strcmp("tag", element_value)) {
         if (!json_is_string(filter_clause_value) || json_string_length(filter_clause_value) <= 0 || json_string_length(filter_clause_value) > 128) {
           return 0;
         }
@@ -520,33 +520,33 @@ json_t * parse_filter_clause_from_db(const json_t * j_result) {
 json_t * parse_filter_clause_from_http(const json_t * filter_clause) {
   json_t * to_return = json_object();
   if (filter_clause != NULL && json_is_object(filter_clause) && to_return != NULL) {
-    if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "element")), "date")) {
+    if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "element")), "date")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_ELEMENT, json_integer(FILTER_CLAUSE_ELEMENT_DATE));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "element")), "priority")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "element")), "priority")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_ELEMENT, json_integer(FILTER_CLAUSE_ELEMENT_PRIORITY));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "element")), "source")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "element")), "source")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_ELEMENT, json_integer(FILTER_CLAUSE_ELEMENT_SOURCE));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "element")), "message")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "element")), "message")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_ELEMENT, json_integer(FILTER_CLAUSE_ELEMENT_MESSAGE));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "element")), "tag")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "element")), "tag")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_ELEMENT, json_integer(FILTER_CLAUSE_ELEMENT_TAG));
     }
     
-    if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), "=")) {
+    if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), "=")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_EQUAL));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), "!=")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), "!=")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_DIFFERENT));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), "<")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), "<")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_LOWER));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), "<=")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), "<=")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_LOWER_EQUAL));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), ">")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), ">")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_HIGHER));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(filter_clause, "operator")), ">=")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(filter_clause, "operator")), ">=")) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_HIGHER_EQUAL));
-    } else if (0 == nstrncasecmp(json_string_value(json_object_get(filter_clause, "operator")), "contains", strlen("contains"))) {
+    } else if (0 == o_strncasecmp(json_string_value(json_object_get(filter_clause, "operator")), "contains", strlen("contains"))) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_CONTAINS));
-    } else if (0 == nstrncasecmp(json_string_value(json_object_get(filter_clause, "operator")), "notcontains", strlen("notcontains"))) {
+    } else if (0 == o_strncasecmp(json_string_value(json_object_get(filter_clause, "operator")), "notcontains", strlen("notcontains"))) {
       json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_OPERATOR, json_integer(FILTER_CLAUSE_OPERATOR_NOT_CONTAINS));
     }
     json_object_set_new(to_return, COLUMN_FILTER_CLAUSE_VALUE, json_copy(json_object_get(filter_clause, "value")));

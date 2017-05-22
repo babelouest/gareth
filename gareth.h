@@ -28,7 +28,7 @@
 #ifndef __GARETH_H_
 #define __GARETH_H_
 
-#define _GARETH_VERSION 1.0
+#define _GARETH_VERSION 1.1
 
 #include <jansson.h>
 
@@ -117,6 +117,7 @@
 
 int init_gareth(struct _u_instance * instance, const char * url_prefix, struct _h_connection * conn);
 int close_gareth(struct _u_instance * instance, const char * url_prefix);
+int set_response_json_body_and_clean(struct _u_response * response, uint status, json_t * json_body);
 
 // SMTP alert management
 json_t * get_smtp_alert(struct _h_connection * conn, const char * name);

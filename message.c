@@ -51,15 +51,15 @@ int add_message(struct _h_connection * conn, const json_t * message) {
     json_decref(db_message);
     return 0;
   } else {
-    if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "NONE")) {
+    if (0 == o_strcmp(json_string_value(json_object_get(message_copy, "priority")), "NONE")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_NONE));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "LOW")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(message_copy, "priority")), "LOW")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_LOW));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "MEDIUM")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(message_copy, "priority")), "MEDIUM")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_MEDIUM));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "HIGH")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(message_copy, "priority")), "HIGH")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_HIGH));
-    } else if (0 == nstrcmp(json_string_value(json_object_get(message_copy, "priority")), "CRITICAL")) {
+    } else if (0 == o_strcmp(json_string_value(json_object_get(message_copy, "priority")), "CRITICAL")) {
       json_object_set_new(db_message, COLUMN_MESSAGE_PRIORITY, json_integer(MESSAGE_PRIORITY_CRITICAL));
     }
     json_object_set_new(db_message, COLUMN_MESSAGE_SOURCE, json_copy(json_object_get(message_copy, "source")));
@@ -123,7 +123,7 @@ json_t * is_message_valid(const json_t * message) {
     priority = json_object_get(message_copy, "priority");
     if (priority != NULL || json_is_string(priority)) {
       value = json_string_value(priority);
-      if (0 != nstrcmp(value, "NONE") && 0 != nstrcmp(value, "LOW") && 0 != nstrcmp(value, "MEDIUM") && 0 != nstrcmp(value, "HIGH") && 0 != nstrcmp(value, "CRITICAL")) {
+      if (0 != o_strcmp(value, "NONE") && 0 != o_strcmp(value, "LOW") && 0 != o_strcmp(value, "MEDIUM") && 0 != o_strcmp(value, "HIGH") && 0 != o_strcmp(value, "CRITICAL")) {
         json_array_append_new(j_return, json_string("Priority is mandatory and must have the following string value: NONE, LOW, MEDIUM, HIGH, CRITICAL"));
       }
     } else {
@@ -247,7 +247,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
   if (keys != NULL && where_clause != NULL) {
     for (i=0; keys[i] != NULL; i++) {
       clause = 0;
-      if (0 == nstrcasecmp("date", keys[i])) {
+      if (0 == o_strcasecmp("date", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -264,17 +264,17 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         } else {
           value = NULL;
         }
-      } else if (0 == nstrcasecmp("priority", keys[i])) {
-        if (0 == nstrcasecmp("low", u_map_get(map_url, keys[i]))) {
+      } else if (0 == o_strcasecmp("priority", keys[i])) {
+        if (0 == o_strcasecmp("low", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_LOW);
-        } else if (0 == nstrcasecmp("medium", u_map_get(map_url, keys[i]))) {
+        } else if (0 == o_strcasecmp("medium", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_MEDIUM);
-        } else if (0 == nstrcasecmp("high", u_map_get(map_url, keys[i]))) {
+        } else if (0 == o_strcasecmp("high", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_HIGH);
-        } else if (0 == nstrcasecmp("critical", u_map_get(map_url, keys[i]))) {
+        } else if (0 == o_strcasecmp("critical", u_map_get(map_url, keys[i]))) {
           clause = 1;
           value = msprintf("%d", MESSAGE_PRIORITY_CRITICAL);
         }
@@ -288,7 +288,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
           str_element = COLUMN_MESSAGE_PRIORITY;
           ope = "=";
         }
-      } else if (0 == nstrcasecmp("source", keys[i])) {
+      } else if (0 == o_strcasecmp("source", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -298,8 +298,8 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         }
         str_element = COLUMN_MESSAGE_SOURCE;
         ope = "=";
-        value = nstrdup(u_map_get(map_url, keys[i]));
-      } else if (0 == nstrcasecmp("text", keys[i])) {
+        value = o_strdup(u_map_get(map_url, keys[i]));
+      } else if (0 == o_strcasecmp("text", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -310,7 +310,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
         str_element = COLUMN_MESSAGE_TEXT;
         ope = "LIKE";
         value = msprintf("%%%s%%", u_map_get(map_url, keys[i]));
-      } else if (0 == nstrcasecmp("tags", keys[i])) {
+      } else if (0 == o_strcasecmp("tags", keys[i])) {
         clause = 1;
         if (*where_clause == NULL) {
           *where_clause = json_object();
@@ -614,7 +614,7 @@ int trigger_http_message(struct _h_connection * conn, const char * http_alert, c
   }
   ulfius_init_request(request);
   request->http_url = parse_string_with_message(json_string_value(json_object_get(db_alert, "url")), message);
-  request->http_verb = nstrdup(json_string_value(json_object_get(db_alert, "method")));
+  request->http_verb = o_strdup(json_string_value(json_object_get(db_alert, "method")));
   if (request->http_url == NULL || request->http_verb == NULL) {
     json_decref(db_alert);
     ulfius_clean_request_full(request);
@@ -655,7 +655,7 @@ int trigger_http_message(struct _h_connection * conn, const char * http_alert, c
  * Parse a message pattern with the input message data
  */
 char * parse_string_with_message(const char * format, const json_t * message) {
-  char * tmp = NULL, * to_return = nstrdup(format), * str_tags = NULL;
+  char * tmp = NULL, * to_return = o_strdup(format), * str_tags = NULL;
   json_t * element, * tag;
   size_t index;
   
@@ -704,7 +704,7 @@ char * parse_string_with_message(const char * format, const json_t * message) {
     if (element != NULL && json_is_array(element)) {
       json_array_foreach(element, index, tag) {
         if (str_tags == NULL) {
-          str_tags = nstrdup(json_string_value(tag));
+          str_tags = o_strdup(json_string_value(tag));
           if (str_tags == NULL) {
             y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
             free(to_return);
