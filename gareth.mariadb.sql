@@ -62,6 +62,7 @@ CREATE TABLE `g_filter_clause` (
 );
 
 CREATE TABLE `g_filter_alert` (
+  `fa_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
   `f_id` INT(11),
   `ah_name` VARCHAR(64) NULL,
   `as_name` VARCHAR(64) NULL,
