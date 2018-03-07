@@ -395,10 +395,10 @@ int is_filter_clause_valid(const json_t * input_filter_clause) {
       if (strchr(element_value, '#') == NULL) {
         char * element_value_secured = msprintf("#%s#", element_value);
         if (strstr(FILTER_CLAUSE_ELEMENT_VALUE_LIST, element_value_secured) == NULL) {
-          free(element_value_secured);
+          o_free(element_value_secured);
           return 0;
         } else {
-          free(element_value_secured);
+          o_free(element_value_secured);
         }
       } else {
         return 0;
@@ -413,10 +413,10 @@ int is_filter_clause_valid(const json_t * input_filter_clause) {
       if (strchr(operator_value, '#') == NULL) {
         char * operator_value_secured = msprintf("#%s#", operator_value);
         if (strstr(FILTER_CLAUSE_OPERATOR_VALUE_LIST, operator_value_secured) == NULL) {
-          free(operator_value_secured);
+          o_free(operator_value_secured);
           return 0;
         } else {
-          free(operator_value_secured);
+          o_free(operator_value_secured);
         }
       } else {
         return 0;

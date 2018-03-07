@@ -328,7 +328,7 @@ int append_where_clause_from_url_parameters(struct _h_connection * conn, json_t 
           json_object_del(*where_clause, str_element);
         }
         json_object_set_new(*where_clause, str_element, json_pack("{ssss}", "operator", ope, "value", value));
-        free(value);
+        o_free(value);
       }
     }
     return 1;
@@ -382,16 +382,16 @@ json_t * generate_where_clause_from_filter_name(struct _h_connection * conn, con
         } else if (FILTER_CLAUSE_ELEMENT_TAG == json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_ELEMENT))) {
           escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, "fc_value")));
           str_value = msprintf("'%\"%s\"%'", escape);
-          free(escape);
+          o_free(escape);
         } else if (FILTER_CLAUSE_ELEMENT_MESSAGE == json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_ELEMENT)) 
 					&& (json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_OPERATOR)) == FILTER_CLAUSE_OPERATOR_CONTAINS || json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_OPERATOR)) == FILTER_CLAUSE_OPERATOR_NOT_CONTAINS)) {
           escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, "fc_value")));
           str_value = msprintf("'%%%s%%'", escape);
-          free(escape);
+          o_free(escape);
         } else {
           escape = h_escape_string(conn, json_string_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_VALUE)));
           str_value = msprintf("'%s'", escape);
-          free(escape);
+          o_free(escape);
         }
         
         switch (json_integer_value(json_object_get(j_filter_clause, COLUMN_FILTER_CLAUSE_OPERATOR))) {
@@ -453,8 +453,8 @@ json_t * generate_where_clause_from_filter_name(struct _h_connection * conn, con
         }
         json_object_set_new(where_clause, str_element, json_pack("{ssss}", "operator", "raw", "value", str_compare));
         
-        free(str_value);
-        free(str_compare);
+        o_free(str_value);
+        o_free(str_compare);
       }
       json_decref(j_filter_clause_list);
     } else {
@@ -551,8 +551,8 @@ void * thread_smtp_message_run(void * args) {
       res = U_ERROR;
       y_log_message(Y_LOG_LEVEL_ERROR, "thread_smtp_message_run - Error parse_string_with_message with body or subject, aborting");
     }
-    free(subject);
-    free(body);
+    o_free(subject);
+    o_free(body);
     if (res != U_OK) {
       y_log_message(Y_LOG_LEVEL_ERROR, "thread_smtp_message_run - Error sending smtp message %s to %s", json_string_value(json_object_get(db_alert, "name")), json_string_value(json_object_get(db_alert, "to")));
     }
@@ -599,7 +599,7 @@ void * thread_http_message_run(void * args) {
 }
 
 int trigger_http_message(struct _h_connection * conn, const char * http_alert, const json_t * message) {
-  struct _u_request * request = malloc(sizeof(struct _u_request));
+  struct _u_request * request = o_malloc(sizeof(struct _u_request));
   json_t * header, * db_alert = get_http_alert(conn, http_alert);
   size_t index;
   char * str_body;
@@ -608,7 +608,7 @@ int trigger_http_message(struct _h_connection * conn, const char * http_alert, c
   
   if (conn == NULL || http_alert == NULL || message == NULL || db_alert == NULL || request == NULL) {
     json_decref(db_alert);
-    free(request);
+    o_free(request);
     y_log_message(Y_LOG_LEVEL_ERROR, "trigger_http_message - Error input parameters");
     return 0;
   }
@@ -625,15 +625,15 @@ int trigger_http_message(struct _h_connection * conn, const char * http_alert, c
     char * key = parse_string_with_message(json_string_value(json_object_get(header, "key")), message);
     char * value = parse_string_with_message(json_string_value(json_object_get(header, "value")), message);
     u_map_put(request->map_header, key, value);
-    free(key);
-    free(value);
+    o_free(key);
+    o_free(value);
   }
   if (json_object_get(db_alert, "body") != json_null()) {
     str_body = parse_string_with_message(json_string_value(json_object_get(db_alert, "body")), message);
     if (str_body != NULL) {
       request->binary_body = str_replace(str_body, " ", "+");
       request->binary_body_length = strlen(request->binary_body);
-      free(str_body);
+      o_free(str_body);
     } else {
       y_log_message(Y_LOG_LEVEL_ERROR, "trigger_http_message - Error parse_string_with_message, aborting");
       json_decref(db_alert);
@@ -661,18 +661,18 @@ char * parse_string_with_message(const char * format, const json_t * message) {
   
   if (format == NULL || message == NULL || to_return == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error input parameters");
-    free(to_return);
+    o_free(to_return);
     return NULL;
   } else {
     element = json_object_get(message, "priority");
     if (element != NULL && json_is_string(element)) {
       tmp = str_replace(to_return, "{priority}", json_string_value(element));
       if (tmp == NULL) {
-        free(to_return);
+        o_free(to_return);
         y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
         return NULL;
       }
-      free(to_return);
+      o_free(to_return);
       to_return = tmp;
     }
     
@@ -680,11 +680,11 @@ char * parse_string_with_message(const char * format, const json_t * message) {
     if (element != NULL && json_is_string(element)) {
       tmp = str_replace(to_return, "{source}", json_string_value(element));
       if (tmp == NULL) {
-        free(to_return);
+        o_free(to_return);
         y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
         return NULL;
       }
-      free(to_return);
+      o_free(to_return);
       to_return = tmp;
     }
     
@@ -692,11 +692,11 @@ char * parse_string_with_message(const char * format, const json_t * message) {
     if (element != NULL && json_is_string(element)) {
       tmp = str_replace(to_return, "{message}", json_string_value(element));
       if (tmp == NULL) {
-        free(to_return);
+        o_free(to_return);
         y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
         return NULL;
       }
-      free(to_return);
+      o_free(to_return);
       to_return = tmp;
     }
     
@@ -707,23 +707,23 @@ char * parse_string_with_message(const char * format, const json_t * message) {
           str_tags = o_strdup(json_string_value(tag));
           if (str_tags == NULL) {
             y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
-            free(to_return);
+            o_free(to_return);
             return NULL;
           }
         } else {
           tmp = msprintf("%s, %s", str_tags, json_string_value(tag));
           if (tmp == NULL) {
             y_log_message(Y_LOG_LEVEL_ERROR, "parse_string_with_message - Error allocating resources");
-            free(to_return);
+            o_free(to_return);
             return NULL;
           }
-          free(str_tags);
+          o_free(str_tags);
           str_tags = tmp;
         }
       }
       tmp = str_replace(to_return, "{tags}", str_tags);
-      free(to_return);
-      free(str_tags);
+      o_free(to_return);
+      o_free(str_tags);
       to_return = tmp;
     }
     
@@ -735,7 +735,7 @@ char * parse_string_with_message(const char * format, const json_t * message) {
       timeinfo = localtime(&mytime);
       strftime(buffer, 26, "%Y/%m/%d - %H:%M:%S", timeinfo);
       tmp = str_replace(to_return, "{date}", buffer);
-      free(to_return);
+      o_free(to_return);
       to_return = tmp;
     }
     
