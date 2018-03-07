@@ -50,11 +50,11 @@ message.o: message.c gareth.h
 	$(CC) $(CFLAGS) message.c
 
 clean:
-	rm -f *.o gareth-standalone unit-tests
+	rm -f *.o gareth-standalone
 
 debug: ADDITIONALFLAGS=-DDEBUG -g -O0
 
-debug: gareth-standalone unit-tests
+debug: gareth-standalone
 
 release-standalone: ADDITIONALFLAGS=-O3
 
@@ -66,7 +66,3 @@ release: gareth.o alert.o filter.o message.o
 
 test: debug
 	./gareth
-
-unit-tests: unit-tests.c
-	$(CC) $(CFLAGS) unit-tests.c
-	$(CC) -o unit-tests unit-tests.o -lc -lulfius -lorcania -ljansson -L$(PREFIX)/lib
