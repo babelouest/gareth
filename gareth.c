@@ -166,7 +166,7 @@ int callback_gareth_get_alert (const struct _u_request * request, struct _u_resp
         response->status = 404;
       }
     } else {
-      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("unknown type")));
+      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "unknown type"));
     }
     return U_CALLBACK_CONTINUE;
   }
@@ -215,10 +215,10 @@ int callback_gareth_add_alert (const struct _u_request * request, struct _u_resp
           }
         } else {
           json_decref(tmp);
-          set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("smtp alert invalid: name already exists in the database")));
+          set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "smtp alert invalid: name already exists in the database"));
         }
       } else {
-        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("smtp alert invalid: name must be a string")));
+        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "smtp alert invalid: name must be a string"));
       }
     } else if (type != NULL && o_strcmp(type, "http") == 0) {
       j_name = json_object_get(json_body, "name");
@@ -250,13 +250,13 @@ int callback_gareth_add_alert (const struct _u_request * request, struct _u_resp
           }
         } else {
           json_decref(tmp);
-          set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("http alert invalid: name already exists in the database")));
+          set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "http alert invalid: name already exists in the database"));
         }
       } else {
-        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("http alert invalid: name must be a string")));
+        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "http alert invalid: name must be a string"));
       }
     } else {
-      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("unknown type")));
+      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "unknown type"));
     }
     json_decref(json_body);
     return U_CALLBACK_CONTINUE;
@@ -341,7 +341,7 @@ int callback_gareth_modify_alert (const struct _u_request * request, struct _u_r
         response->status = 404;
       }
     } else {
-      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("unknown type")));
+      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "unknown type"));
       y_log_message(Y_LOG_LEVEL_ERROR, "Error http invalid: unknown type");
     }
     json_decref(json_body);
@@ -387,7 +387,7 @@ int callback_gareth_delete_alert (const struct _u_request * request, struct _u_r
         response->status = 404;
       }
     } else {
-      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("unknown type")));
+      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "unknown type"));
     }
     return U_CALLBACK_CONTINUE;
   }
@@ -468,10 +468,10 @@ int callback_gareth_add_filter (const struct _u_request * request, struct _u_res
         }
       } else {
         json_decref(tmp);
-        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("filter invalid: name already exists in the database")));
+        set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "filter invalid: name already exists in the database"));
       }
     } else {
-      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("filter invalid: name must be a string")));
+      set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "filter invalid: name must be a string"));
     }
     json_decref(json_body);
     return U_CALLBACK_CONTINUE;
@@ -486,7 +486,7 @@ int callback_gareth_modify_filter (const struct _u_request * request, struct _u_
 
   if (json_body == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "callback_gareth_modify_filter - Error json input parameters callback_gareth_modify_filter");
-    set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("invalid input json format")));
+    set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "invalid input json format"));
     return U_CALLBACK_CONTINUE;
   } else if (user_data == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "callback_gareth_modify_filter - Error, callback_gareth_modify_filter user_data is NULL");
@@ -594,7 +594,7 @@ int callback_gareth_add_messages (const struct _u_request * request, struct _u_r
 
   if (json_body == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "callback_gareth_add_messages - Error json input parameters callback_gareth_add_messages");
-    set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", json_string("invalid input json format")));
+    set_response_json_body_and_clean(response, 400, json_pack("{ss}", "error", "invalid input json format"));
     return U_CALLBACK_CONTINUE;
   } else if (user_data == NULL) {
     y_log_message(Y_LOG_LEVEL_ERROR, "callback_gareth_add_messages - Error, callback_gareth_add_messages user_data is NULL");
