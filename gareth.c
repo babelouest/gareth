@@ -107,6 +107,7 @@ int close_gareth(struct _u_instance * instance, const char * url_prefix) {
 
 // Get all alerts
 int callback_gareth_get_alert_list (const struct _u_request * request, struct _u_response * response, void * user_data) {
+  UNUSED(request);
   struct _h_connection * conn;
   json_t * smtp_list, * http_list, * json_body;
   
@@ -395,6 +396,7 @@ int callback_gareth_delete_alert (const struct _u_request * request, struct _u_r
 
 // Filter management callback functions
 int callback_gareth_get_filter_list (const struct _u_request * request, struct _u_response * response, void * user_data) {
+  UNUSED(request);
   struct _h_connection * conn;
   
   if (user_data == NULL) {
@@ -451,7 +453,7 @@ int callback_gareth_add_filter (const struct _u_request * request, struct _u_res
         } else if (json_array_size(j_is_valid) > 0) {
           set_response_json_body_and_clean(response, 400, json_pack("{so}", "error", j_is_valid));
         } else {
-          tmp = parse_filter_from_http(conn, json_body);
+          tmp = parse_filter_from_http(json_body);
           if (tmp != NULL) {
             if (add_filter(conn, tmp)) {
               response->status = 200;
@@ -506,7 +508,7 @@ int callback_gareth_modify_filter (const struct _u_request * request, struct _u_
         set_response_json_body_and_clean(response, 400, json_pack("{so}", "error", j_is_valid));
       } else {
         json_decref(j_is_valid);
-        tmp = parse_filter_from_http(conn, json_body);
+        tmp = parse_filter_from_http(json_body);
         if (tmp != NULL && update_filter(conn, tmp, name)) {
           response->status = 200;
         } else {

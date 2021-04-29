@@ -30,6 +30,9 @@
 
 #define _GARETH_VERSION 1.1
 
+/** Macro to avoid compiler warning when some parameters are unused and that's ok **/
+#define UNUSED(x) (void)(x)
+
 #include <jansson.h>
 
 /** Angharad libraries **/
@@ -145,7 +148,7 @@ json_t * get_filter(struct _h_connection * conn, const char * name);
 json_t * get_filter_clause(struct _h_connection * conn, json_t * filter_id);
 json_t * get_filter_alert(struct _h_connection * conn, json_t * filter_id);
 json_t * parse_filter_from_db(const json_t * j_result);
-json_t * parse_filter_from_http(struct _h_connection * conn, const json_t * input_filter);
+json_t * parse_filter_from_http(const json_t * input_filter);
 json_t * parse_filter_clause_from_db(const json_t * j_result);
 json_t * parse_filter_clause_from_http(const json_t * filter_clause);
 json_t * parse_filter_alert_from_db(const json_t * filter_alert);

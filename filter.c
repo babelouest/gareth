@@ -166,7 +166,7 @@ json_t * is_filter_valid(struct _h_connection * conn, const json_t * input_filte
   return j_message;
 }
 
-json_t * parse_filter_from_http(struct _h_connection * conn, const json_t * input_filter) {
+json_t * parse_filter_from_http(const json_t * input_filter) {
   json_t * db_smtp = json_object(), * j_filter_clause, * j_filter_clause_list = json_array();
   size_t index;
   
