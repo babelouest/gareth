@@ -2,6 +2,8 @@
 
 Log application and messenging using a Json/REST interface.
 
+**This repository has been archived because this source code has moved to its [mother project](https://github.com/babelouest/angharad)**
+
 Part of the Angharad System, this program is intended to log messages from Angharad elements, and can send an http request or an smtp message if a trigger has been set for the message.
 
 A message has the following attributes:
